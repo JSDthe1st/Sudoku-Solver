@@ -28,7 +28,7 @@ namespace Sudoku_Solver
             if (text == "-")
                 Value = null;
             else
-                Value = 
+                Value = 0;
         }
 
         public void RemovePossibility(byte number)

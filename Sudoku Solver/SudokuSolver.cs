@@ -14,7 +14,7 @@ namespace Sudoku_Solver
         {
 
         }
-
+        
         public SudokuSolver(SudokuField[,] numbers)
             : this()
         {
