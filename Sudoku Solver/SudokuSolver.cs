@@ -38,7 +38,7 @@ namespace Sudoku_Solver
 
                 for (int j = 0; j < 9; j++)
                 {
-                    numbers[i, j] = new SudokuField(Convert.ToByte(rowElements[j]));
+                    numbers[i, j] = new SudokuField(rowElements[j]);
                 }
             }
         }
@@ -50,8 +50,14 @@ namespace Sudoku_Solver
                 for (int j = 0; j < 9; j++)
                 {
                     Console.Write(numbers[i, j] + " ");
+
+                    if (j == 2 || j == 5)
+                        Console.Write("| ");
                 }
                 Console.WriteLine();
+
+                if (i == 2 || i == 5)
+                    Console.WriteLine("------+-------+------");
             }
         }
 

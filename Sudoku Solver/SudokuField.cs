@@ -8,40 +8,33 @@ namespace Sudoku_Solver
 {
     public class SudokuField
     {
-        public byte? Value;
+        public char Value;
 
-        public List<byte> PossibleNumbers = new List<byte>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        public List<char> PossibleNumbers = new List<char>() { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
         public bool IsSet 
         { 
-            get => Value is not null;
+            get => Value == '-';
         }
 
 
-        public SudokuField(byte? value = null)
+        public SudokuField(char value = '-')
         {
             this.Value = value;
         }
 
-        public SudokuField(string text)
-        {
-            if (text == "-")
-                Value = null;
-            else
-                Value = 0;
-        }
+        public SudokuField(string value)
+            : this(value[0])
+        { }
 
-        public void RemovePossibility(byte number)
+        public void RemovePossibility(char number)
         {
             PossibleNumbers.Remove(number);
         }
 
         public override string ToString()
         {
-            if (Value is byte number)
-                return number.ToString();
-
-            return "-";
+            return Value.ToString();
         }
     }
 }
