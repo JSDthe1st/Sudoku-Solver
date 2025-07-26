@@ -1,53 +1,77 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Sudoku_Solver
 {
-    delegate void CellAction(int startRow, int startCol, int row, int col);
+    delegate void CellAction(int row, int col);
     public partial class SudokuSolver
     {
         public void Solve()
         {
             // remove possibilities from other cells
-            // check if it is the only possibility
+            RemovePossibleNumbers();
 
+            // check if a cell has only one possible number and set it
+
+            // check if a possible number is only in one cell
+
+
+
+        }
+
+        void RemovePossibleNumbers()
+        {
             for (int row = 0; row < 9; row++)
             {
                 for (int col = 0; col < 9; col++)
                 {
                     SudokuCell currentCell = board[row, col];
+
                     if (currentCell.IsSet)
-                        iterateRow(row, col, (startRow, startCol, r, c) => board[r, c].RemovePossibility(currentCell.Value));
+                    {
+                        iterateRow(row, (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value));
+                        iterateColumn(col, (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value));
+                        iterateBox(row, col, (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value));
+                    }
                 }
             }
-            
         }
 
-        void iterateRow(int startRow, int startCol, CellAction action)
+        void iterateRow(int startRow, CellAction action)
         {
-            int r = startRow;
-            for (int c = 0; c < 9; c++)
+            int row = startRow;
+            for (int col = 0; col < 9; col++)
             {
-                action(startRow, startCol, r, c);
+                action(row, col);
             }
         }
 
-        void iterateColumn(int startRow, int startCol, CellAction action)
+        void iterateColumn(int startCol, CellAction action)
         {
-            int c = startCol;
-            for (int r = 0; r < 9; r++)
+            int col = startCol;
+            for (int row = 0; row < 9; row++)
             {
-                action(startRow, startCol, r, c);
+                action(row, col);
             }
         }
 
         void iterateBox(int startRow, int startCol, CellAction action)
         {
+            int rowOffset = startRow - (startRow % 3);
+            int colOffset = startCol - (startCol % 3);
 
+            for (int row = 0; row < 3; row++)
+            {
+                for (int col = 0; col < 3; col++)
+                {
+                    action(rowOffset + row, colOffset + col);
+                }
+            }
         }
     }
 }

@@ -14,21 +14,28 @@ namespace Sudoku_Solver
 
         public bool IsSet 
         { 
-            get => Value == '-';
+            get => Value != '-';
         }
 
         public SudokuCell(char value = '-')
         {
             this.Value = value;
+            RemovePossibleNumber(value);
         }
 
         public SudokuCell(string value)
             : this(value[0])
         { }
 
-        public void RemovePossibility(char number)
+        public void RemovePossibleNumber(char number)
         {
             PossibleNumbers.Remove(number);
+        }
+
+        public void AddPossibility(char number)
+        {
+            PossibleNumbers.Add(number);
+            //PossibleNumbers.Sort();
         }
 
         public override string ToString()

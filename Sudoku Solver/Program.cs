@@ -14,6 +14,7 @@ namespace Sudoku_Solver
             SudokuSolver solver = new SudokuSolver();
             solver.LoadNumbers(@"D:\Projects\TO DO\Sudoku Solver\example_board.txt");
             solver.Display();
+            solver.Solve();
         } 
     }
 }
