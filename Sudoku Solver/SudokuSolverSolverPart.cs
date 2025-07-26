@@ -17,6 +17,7 @@ namespace Sudoku_Solver
             RemovePossibleNumbers();
 
             // check if a cell has only one possible number and set it
+            FillInCellsWithOnePossibility();
 
             // check if a possible number is only in one cell
 
@@ -32,12 +33,39 @@ namespace Sudoku_Solver
                 {
                     SudokuCell currentCell = board[row, col];
 
-                    if (currentCell.IsSet)
+                    if (currentCell.IsFilledIn)
                     {
                         iterateRow(row, (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value));
                         iterateColumn(col, (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value));
                         iterateBox(row, col, (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value));
                     }
+                }
+            }
+        }
+
+        void FillInCellsWithOnePossibility()
+        {
+            for (int row = 0; row < 9; row++)
+            {
+                for (int col = 0; col < 9; col++)
+                {
+                    SudokuCell currentCell = board[row, col];
+
+                    if (currentCell.PossibleNumbers.Count == 1)
+                        currentCell.Value = currentCell.PossibleNumbers[0];
+                }
+            }
+        }
+
+        void IterateBoard(CellAction action)
+        {
+            for (int row = 0; row < 9; row++)
+            {
+                for (int col = 0; col < 9; col++)
+                {
+                    SudokuCell currentCell = board[row, col];
+
+                    action(row, col);
                 }
             }
         }
