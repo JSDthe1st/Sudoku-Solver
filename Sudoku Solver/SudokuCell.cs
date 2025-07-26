@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sudoku_Solver
 {
-    public class SudokuField
+    public class SudokuCell
     {
         public char Value;
 
@@ -17,13 +17,12 @@ namespace Sudoku_Solver
             get => Value == '-';
         }
 
-
-        public SudokuField(char value = '-')
+        public SudokuCell(char value = '-')
         {
             this.Value = value;
         }
 
-        public SudokuField(string value)
+        public SudokuCell(string value)
             : this(value[0])
         { }
 

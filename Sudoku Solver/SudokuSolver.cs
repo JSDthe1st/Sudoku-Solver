@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Sudoku_Solver
 {
-    public class SudokuSolver
+    public partial class SudokuSolver
     {
-        SudokuField[,] numbers = new SudokuField[9,9];
+        SudokuCell[,] board = new SudokuCell[9,9];
 
         public SudokuSolver()
         {
 
         }
         
-        public SudokuSolver(SudokuField[,] numbers)
+        public SudokuSolver(SudokuCell[,] board)
             : this()
         {
-            this.numbers = numbers;
+            this.board = board;
         }
 
-        public void LoadNumbers(SudokuField[,] numbers)
+        public void LoadNumbers(SudokuCell[,] board)
         {
-            this.numbers = numbers;
+            this.board = board;
         }
 
         public void LoadNumbers(string path)
@@ -38,7 +33,7 @@ namespace Sudoku_Solver
 
                 for (int j = 0; j < 9; j++)
                 {
-                    numbers[i, j] = new SudokuField(rowElements[j]);
+                    board[i, j] = new SudokuCell(rowElements[j]);
                 }
             }
         }
@@ -49,7 +44,7 @@ namespace Sudoku_Solver
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    Console.Write(numbers[i, j] + " ");
+                    Console.Write(board[i, j] + " ");
 
                     if (j == 2 || j == 5)
                         Console.Write("| ");
@@ -59,11 +54,6 @@ namespace Sudoku_Solver
                 if (i == 2 || i == 5)
                     Console.WriteLine("------+-------+------");
             }
-        }
-
-        public void Solve()
-        {
-
         }
     }
 }
