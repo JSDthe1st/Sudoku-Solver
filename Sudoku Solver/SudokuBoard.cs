@@ -1,16 +1,16 @@
 ﻿
 namespace Sudoku_Solver
 {
-    public partial class SudokuSolver
+    public partial class SudokuBoard
     {
         SudokuCell[,] board = new SudokuCell[9,9];
 
-        public SudokuSolver()
+        public SudokuBoard()
         {
 
         }
         
-        public SudokuSolver(SudokuCell[,] board)
+        public SudokuBoard(SudokuCell[,] board)
             : this()
         {
             this.board = board;

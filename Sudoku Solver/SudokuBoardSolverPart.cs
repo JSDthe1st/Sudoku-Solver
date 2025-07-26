@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 namespace Sudoku_Solver
 {
     delegate void CellAction(int row, int col);
-    public partial class SudokuSolver
+    public partial class SudokuBoard
     {
         public void Solve()
         {
-            // remove possibilities from other cells
-            RemovePossibleNumbers();
+            while (!IsSolved())
+            {
+                // remove possibilities from other cells
+                RemovePossibleNumbers();
 
-            // check if a cell has only one possible number and set it
-            FillInCellsWithOnePossibility();
+                // check if a cell has only one possible number and set it
+                FillInCellsWithOnePossibility();
 
-            // check if a possible number is only in one cell
-
-
-
+                // check if a possible number is only in one cell
+            }
         }
 
         void RemovePossibleNumbers()
@@ -49,6 +49,20 @@ namespace Sudoku_Solver
                 if (!currentCell.IsFilledIn && currentCell.PossibleNumbers.Count == 1)
                     currentCell.Value = currentCell.PossibleNumbers[0];
             });
+        }
+
+        bool IsSolved()
+        {
+            bool solved = true;
+            IterateBoard((row, col) =>
+            {
+                SudokuCell currentCell = board[row, col];
+
+                if (!currentCell.IsFilledIn)
+                    solved = false;
+            });
+
+            return solved;
         }
 
         void IterateBoard(CellAction action)
