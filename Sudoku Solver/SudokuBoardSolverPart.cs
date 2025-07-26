@@ -22,6 +22,8 @@ namespace Sudoku_Solver
                 FillInCellsWithOnePossibility();
 
                 // check if a possible number is only in one cell
+
+                // recursive algorithm for multiple possibilities
             }
         }
 

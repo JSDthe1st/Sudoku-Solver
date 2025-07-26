@@ -16,7 +16,9 @@ namespace Sudoku_Solver
 
             board.Solve();
             board.Display();
-            
+
+            // add ocr from last screenshot from screenshot folder
+            // add keyboard controll for automatic solving
         }
     }
 }
