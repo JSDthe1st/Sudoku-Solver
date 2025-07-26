@@ -27,34 +27,28 @@ namespace Sudoku_Solver
 
         void RemovePossibleNumbers()
         {
-            for (int row = 0; row < 9; row++)
+            IterateBoard((row, col) =>
             {
-                for (int col = 0; col < 9; col++)
-                {
-                    SudokuCell currentCell = board[row, col];
+                SudokuCell currentCell = board[row, col];
 
-                    if (currentCell.IsFilledIn)
-                    {
-                        iterateRow(row, (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value));
-                        iterateColumn(col, (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value));
-                        iterateBox(row, col, (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value));
-                    }
+                if (currentCell.IsFilledIn)
+                {
+                    IterateRow(row, (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value));
+                    IterateColumn(col, (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value));
+                    iterateBox(row, col, (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value));
                 }
-            }
+            });
         }
 
         void FillInCellsWithOnePossibility()
         {
-            for (int row = 0; row < 9; row++)
+            IterateBoard((row, col) =>
             {
-                for (int col = 0; col < 9; col++)
-                {
-                    SudokuCell currentCell = board[row, col];
+                SudokuCell currentCell = board[row, col];
 
-                    if (currentCell.PossibleNumbers.Count == 1)
-                        currentCell.Value = currentCell.PossibleNumbers[0];
-                }
-            }
+                if (!currentCell.IsFilledIn && currentCell.PossibleNumbers.Count == 1)
+                    currentCell.Value = currentCell.PossibleNumbers[0];
+            });
         }
 
         void IterateBoard(CellAction action)
@@ -63,14 +57,12 @@ namespace Sudoku_Solver
             {
                 for (int col = 0; col < 9; col++)
                 {
-                    SudokuCell currentCell = board[row, col];
-
                     action(row, col);
                 }
             }
         }
 
-        void iterateRow(int startRow, CellAction action)
+        void IterateRow(int startRow, CellAction action)
         {
             int row = startRow;
             for (int col = 0; col < 9; col++)
@@ -79,7 +71,7 @@ namespace Sudoku_Solver
             }
         }
 
-        void iterateColumn(int startCol, CellAction action)
+        void IterateColumn(int startCol, CellAction action)
         {
             int col = startCol;
             for (int row = 0; row < 9; row++)
