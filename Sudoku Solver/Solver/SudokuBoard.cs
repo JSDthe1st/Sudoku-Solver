@@ -1,5 +1,4 @@
-﻿
-using Sudoku_Solver.Sudoku;
+﻿using Sudoku_Solver.Sudoku;
 
 namespace Sudoku_Solver
 {

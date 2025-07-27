@@ -24,4 +24,12 @@
     <PackageReference Include="Tesseract.Data.English" Version="4.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="C:\Users\Sebastian\.nuget\packages\tesseract.data.english\4.0.0\build\Tesseract.Data.English.targets" Link="Reader\Tesseract.Data.English.targets" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\Sebastian\.nuget\packages\tesseract.data.english\4.0.0\build\tessdata\eng.traineddata" />
+  </ItemGroup>
+
 </Project>

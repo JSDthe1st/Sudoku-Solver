@@ -19,8 +19,13 @@ namespace Sudoku_Solver.Sudoku
 
         public SudokuCell(char value = '-')
         {
-            Value = value;
-            RemovePossibleNumber(value);
+            if ((value >= '0' && value <= '9') || value == '-')
+            {
+                Value = value;
+                RemovePossibleNumber(value);
+            }
+
+            throw new ArgumentException("Invalid value for SudokuCell, must be digit or dash.");
         }
 
         public SudokuCell(string value)
