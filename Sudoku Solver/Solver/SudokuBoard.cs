@@ -1,4 +1,6 @@
 ﻿
+using Sudoku_Solver.Sudoku;
+
 namespace Sudoku_Solver
 {
     public partial class SudokuBoard
@@ -40,6 +42,9 @@ namespace Sudoku_Solver
 
         public void Display()
         {
+            if (board is null)
+                return;
+
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sudoku_Solver.Sudoku;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO.Pipes;

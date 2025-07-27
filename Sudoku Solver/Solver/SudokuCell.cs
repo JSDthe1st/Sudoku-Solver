@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sudoku_Solver
+namespace Sudoku_Solver.Sudoku
 {
     public class SudokuCell
     {
@@ -19,7 +19,7 @@ namespace Sudoku_Solver
 
         public SudokuCell(char value = '-')
         {
-            this.Value = value;
+            Value = value;
             RemovePossibleNumber(value);
         }
 
