@@ -7,7 +7,8 @@ namespace Sudoku_Solver
     {
         public void Solve(bool displayProgress = false)
         {
-            List<(int filledIn, int allPossible)> history = new List<(int, int)> ();
+            List<(int, int)> history = new List<(int, int)> ();
+
             while (!IsSolved())
             {
                 // remove possibilities from other cells
@@ -17,6 +18,7 @@ namespace Sudoku_Solver
                 FillInCellsWithOnePossibility();
 
                 // check if a possible number is only in one cell
+                FillInCellsThatHoldOnlyPossibility();
 
                 // recursive algorithm for multiple possibilities
                 
@@ -32,10 +34,8 @@ namespace Sudoku_Solver
                 {
                     history.RemoveAt(0);
 
-                    if (history[0].filledIn == history[1].filledIn &&
-                        history[0].filledIn == history[2].filledIn &&
-                        history[0].allPossible == history[1].allPossible &&
-                        history[0].allPossible == history[2].allPossible)
+                    if (history[0] == history[1] &&
+                        history[0] == history[2])
                     {
                         Console.WriteLine("Timedout!");
                         break;
@@ -68,6 +68,11 @@ namespace Sudoku_Solver
                 if (!currentCell.IsFilledIn && currentCell.PossibleNumbers.Count == 1)
                     currentCell.Value = currentCell.PossibleNumbers[0];
             });
+        }
+
+        void FillInCellsThatHoldOnlyPossibility()
+        {
+            throw new NotImplementedException();
         }
 
         bool IsSolved()

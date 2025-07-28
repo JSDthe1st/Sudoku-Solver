@@ -1,7 +1,7 @@
 ﻿using Sudoku_Solver.Reader;
 using Sudoku_Solver.Sudoku;
 using System.Drawing;
-using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace Sudoku_Solver
 {
@@ -10,7 +10,6 @@ namespace Sudoku_Solver
         public static void Main(string[] args)
         {
             var listOfCells = CutLastScreenshot();
-            //return;
 
             SudokuCell[,] cells = ReadValuesFromImages(listOfCells);
 
@@ -40,6 +39,7 @@ namespace Sudoku_Solver
         public static SudokuCell[,] ReadValuesFromImages(string[] listOfCells)
         {
             SudokuCell[,] cells = new SudokuCell[9, 9];
+
             OCR ocr = new OCR();
             for (int i = 0; i < 81; i++)
             {
@@ -47,6 +47,7 @@ namespace Sudoku_Solver
                 value = ocr.ReadSingleCharacter(listOfCells[i]);
                 cells[i / 9, i % 9] = new SudokuCell(value);
             }
+            ocr.Dispose();
 
             return cells;
         }

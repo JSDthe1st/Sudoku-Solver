@@ -22,9 +22,14 @@ namespace Sudoku_Solver.Reader
             return page.GetText().Trim();
         }
 
-       ~OCR()
+        public void Dispose()
         {
             ocr?.Dispose();
+        }
+
+        ~OCR()
+        {
+            Dispose();
         }
     }
 }
