@@ -1,11 +1,4 @@
 ﻿using Sudoku_Solver.Sudoku;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO.Pipes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sudoku_Solver
 {
@@ -14,6 +7,7 @@ namespace Sudoku_Solver
     {
         public void Solve()
         {
+            List<(int filledIn, int allPossible)> history = new List<(int, int)> ();
             while (!IsSolved())
             {
                 // remove possibilities from other cells
@@ -27,6 +21,22 @@ namespace Sudoku_Solver
                 // recursive algorithm for multiple possibilities
                 Display();
                 Console.WriteLine();
+
+                //tmeout
+                history.Add((NumberOfFilledCells(), NumberOfPossibleNumbers()));
+                if (history.Count > 3)
+                {
+                    history.RemoveAt(0);
+
+                    if (history[0].filledIn == history[1].filledIn &&
+                        history[0].filledIn == history[2].filledIn &&
+                        history[0].allPossible == history[1].allPossible &&
+                        history[0].allPossible == history[2].allPossible)
+                    {
+                        Console.WriteLine("Timedout!");
+                        break;
+                    }
+                }
             }
         }
 
@@ -97,6 +107,48 @@ namespace Sudoku_Solver
             });
 
             return count;
+        }
+
+        public bool IsCorrect()
+        {
+            bool isCorrect = true;
+
+            IterateBoard((row, col) =>
+            {
+                SudokuCell currentCell = board[row, col];
+
+                IterateRow(row, (row, c) => 
+                { 
+                    if (board[row, c].Value == currentCell.Value) 
+                    { 
+                        isCorrect = false;
+                        Console.WriteLine($"Row conflict at x:{row} y:{col}");
+                    }
+                });
+
+                IterateColumn(col, (row, c) => 
+                { 
+                    if (board[row, c].Value == currentCell.Value)
+                    {
+                        isCorrect = false;
+                        Console.WriteLine($"Column conflict at x:{row} y:{col}");
+                    }
+                });
+
+                IterateBox(row, col, (row, c) => 
+                { 
+                    if (board[row, c].Value == currentCell.Value)
+                    {
+                        isCorrect = false;
+                        Console.WriteLine($"Box conflict at x:{row} y:{col}");
+                    }
+                });
+            });
+
+            if (isCorrect) 
+                Console.WriteLine("No conflicts founs.");
+            
+            return isCorrect;
         }
 
         void IterateBoard(CellAction action)

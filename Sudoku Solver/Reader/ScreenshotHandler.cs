@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Windows.Forms;
 
 namespace Sudoku_Solver
 {
@@ -18,7 +17,7 @@ namespace Sudoku_Solver
             {
                 for (int j = 0; j < numberOfCells; j++)
                 {
-                    int padding = 10;
+                    int padding = 22;
                     int cropStartX = j * cellWidth + padding;
                     int cropStartY = i * cellHeight + padding;
                     int cropHeight = cellWidth - padding;

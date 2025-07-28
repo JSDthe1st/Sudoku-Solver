@@ -27,7 +27,7 @@ namespace Sudoku_Solver
 
             SudokuBoard board = new SudokuBoard(cells);
             board.Display();
-            return;
+            //return;
             board.Display();
             board.Solve();
         }
