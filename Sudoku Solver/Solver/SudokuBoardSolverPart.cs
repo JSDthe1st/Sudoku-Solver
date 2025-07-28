@@ -5,7 +5,7 @@ namespace Sudoku_Solver
     delegate void CellAction(int row, int col);
     public partial class SudokuBoard
     {
-        public void Solve()
+        public void Solve(bool displayProgress = false)
         {
             List<(int filledIn, int allPossible)> history = new List<(int, int)> ();
             while (!IsSolved())
@@ -19,8 +19,12 @@ namespace Sudoku_Solver
                 // check if a possible number is only in one cell
 
                 // recursive algorithm for multiple possibilities
-                Display();
-                Console.WriteLine();
+                
+                if (displayProgress)
+                {
+                    Display();
+                    Console.WriteLine();
+                }
 
                 //tmeout
                 history.Add((NumberOfFilledCells(), NumberOfPossibleNumbers()));
@@ -109,7 +113,7 @@ namespace Sudoku_Solver
             return count;
         }
 
-        public bool IsCorrect()
+        public bool IsCorrect(bool conflictMesseges = true)
         {
             bool isCorrect = true;
 
@@ -122,7 +126,8 @@ namespace Sudoku_Solver
                     if (board[row, c].Value == currentCell.Value) 
                     { 
                         isCorrect = false;
-                        Console.WriteLine($"Row conflict at x:{row} y:{col}");
+                        if (conflictMesseges)
+                            Console.WriteLine($"Row conflict at x:{row} y:{col}");
                     }
                 });
 
@@ -131,7 +136,8 @@ namespace Sudoku_Solver
                     if (board[row, c].Value == currentCell.Value)
                     {
                         isCorrect = false;
-                        Console.WriteLine($"Column conflict at x:{row} y:{col}");
+                        if (conflictMesseges)
+                            Console.WriteLine($"Column conflict at x:{row} y:{col}");
                     }
                 });
 
@@ -140,7 +146,8 @@ namespace Sudoku_Solver
                     if (board[row, c].Value == currentCell.Value)
                     {
                         isCorrect = false;
-                        Console.WriteLine($"Box conflict at x:{row} y:{col}");
+                        if (conflictMesseges)
+                            Console.WriteLine($"Box conflict at x:{row} y:{col}");
                     }
                 });
             });

@@ -9,14 +9,32 @@ namespace Sudoku_Solver
         public static void Main(string[] args)
         {
 
+            var listOfCells = CutLastScreenshot();
+            //return;
+
+            SudokuCell[,] cells = ReadValuesFromImages(listOfCells);
+
+            SudokuBoard board = new SudokuBoard(cells);
+            board.Display();
+
+            //board.Solve(true);
+        }
+
+        public static string[] CutLastScreenshot()
+        {
             string screenshotPaht = ScreenshotHandler.GetLastScreenshotPath();
-            List<Image> cellImages = ScreenshotHandler.SplitImageIntoCells(screenshotPaht, 9);
+            List<Image> cellImages = ScreenshotHandler.SplitImageIntoCells(screenshotPaht, 9, 0);
             string cellsFolder = "Cells";
             ScreenshotHandler.Save(cellImages, cellsFolder);
 
             var listOfCells = Directory.GetFiles(cellsFolder);
 
-            SudokuCell[,] cells = new SudokuCell[9,9];
+            return listOfCells;
+        }
+
+        public static SudokuCell[,] ReadValuesFromImages(string[] listOfCells)
+        {
+            SudokuCell[,] cells = new SudokuCell[9, 9];
             OCR ocr = new OCR();
             for (int i = 0; i < 81; i++)
             {
@@ -25,11 +43,7 @@ namespace Sudoku_Solver
                 cells[i / 9, i % 9] = new SudokuCell(value);
             }
 
-            SudokuBoard board = new SudokuBoard(cells);
-            board.Display();
-            //return;
-            board.Display();
-            board.Solve();
+            return cells;
         }
     }
 }

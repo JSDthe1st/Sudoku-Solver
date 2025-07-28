@@ -4,7 +4,7 @@ namespace Sudoku_Solver
 {
     public static class ScreenshotHandler
     {
-        public static List<Image> SplitImageIntoCells(string imagePath, int numberOfCells)
+        public static List<Image> SplitImageIntoCells(string imagePath, int numberOfCells, int cutPadding = 0)
         {
             Image screenshot = Image.FromFile(imagePath);
 
@@ -17,11 +17,10 @@ namespace Sudoku_Solver
             {
                 for (int j = 0; j < numberOfCells; j++)
                 {
-                    int padding = 22;
-                    int cropStartX = j * cellWidth + padding;
-                    int cropStartY = i * cellHeight + padding;
-                    int cropHeight = cellWidth - padding;
-                    int cropWidth = cellHeight - padding;
+                    int cropStartX = j * cellWidth + cutPadding;
+                    int cropStartY = i * cellHeight + cutPadding;
+                    int cropHeight = cellWidth - cutPadding;
+                    int cropWidth = cellHeight - cutPadding;
 
                     Image croppedImage = CropImage(GetLastScreenshotPath(), cropStartX, cropStartY, cropWidth, cropHeight);
                     cells.Add(croppedImage);
