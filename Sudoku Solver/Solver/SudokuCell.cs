@@ -14,13 +14,12 @@ namespace Sudoku_Solver.Sudoku
             get { return value; }
             set
             {
-                if ((value >= '0' && value <= '9') || value == '-')
+                this.value = '-';
+                if (value >= '0' && value <= '9')
                 {
                     this.value = value;
                     RemovePossibleNumber(value);
                 }
-
-                throw new ArgumentException("Invalid value for SudokuCell, must be digit or dash.");
             }
         }
 
@@ -38,8 +37,12 @@ namespace Sudoku_Solver.Sudoku
         }
 
         public SudokuCell(string value)
-            : this(value[0])
-        { }
+        {
+            if (value.Length == 0 || value == null)
+                Value = '-';
+            else
+                Value = value[0];
+        }
 
         public void RemovePossibleNumber(char number)
         {

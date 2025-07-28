@@ -25,6 +25,8 @@ namespace Sudoku_Solver
                 // check if a possible number is only in one cell
 
                 // recursive algorithm for multiple possibilities
+                Display();
+                Console.WriteLine();
             }
         }
 

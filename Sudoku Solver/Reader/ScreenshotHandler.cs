@@ -3,36 +3,52 @@ using System.Windows.Forms;
 
 namespace Sudoku_Solver
 {
-    public static class BoardReader
+    public static class ScreenshotHandler
     {
-
-        public static void SplitImageIntoCells()
+        public static List<Image> SplitImageIntoCells(string imagePath, int numberOfCells)
         {
-            Image screenshot = Image.FromFile(GetLastScreenshotPath());
+            Image screenshot = Image.FromFile(imagePath);
 
-            int cellWidth = screenshot.Width / 9;
-            int cellHeight = screenshot.Height / 9;
+            int cellWidth = screenshot.Width / numberOfCells;
+            int cellHeight = screenshot.Height / numberOfCells;
 
             List<Image> cells = new List<Image>();
-            for (int i = 0; i < 9; i++)
+
+            for (int i = 0; i < numberOfCells; i++)
             {
-                for (int j = 0; j < 9; j++)
+                for (int j = 0; j < numberOfCells; j++)
                 {
                     int padding = 10;
                     int cropStartX = j * cellWidth + padding;
                     int cropStartY = i * cellHeight + padding;
                     int cropHeight = cellWidth - padding;
                     int cropWidth = cellHeight - padding;
+
                     Image croppedImage = CropImage(GetLastScreenshotPath(), cropStartX, cropStartY, cropWidth, cropHeight);
                     cells.Add(croppedImage);
                 }
             }
 
-            for (int i = 0; i < cells.Count; i++)
-            {
-                cells[i].Save($"Cells\\cell{i}.png");
-            }
+            return cells;
+        }
 
+        public static void Save(Image image, string path)
+        {
+            image.Save(path);
+        }
+
+        public static void Save(List<Image> images, string path)
+        {
+            int maxNumberOfDigits = images.Count.ToString().Length;
+
+            for (int i = 0; i < images.Count; i++)
+            {
+                int currentNumberOfDigits = i.ToString().Length;
+                string cellNumber = new string('0', maxNumberOfDigits - currentNumberOfDigits) + i.ToString();
+
+                string fullPath = Path.Combine(path, $"cell{cellNumber}.png");
+                images[i].Save(fullPath);
+            }
         }
 
         static Image CropImage(string path, int x, int y, int width, int height)
