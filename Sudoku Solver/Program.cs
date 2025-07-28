@@ -1,6 +1,7 @@
 ﻿using Sudoku_Solver.Reader;
 using Sudoku_Solver.Sudoku;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace Sudoku_Solver
 {
@@ -8,7 +9,6 @@ namespace Sudoku_Solver
     {
         public static void Main(string[] args)
         {
-
             var listOfCells = CutLastScreenshot();
             //return;
 
@@ -22,9 +22,14 @@ namespace Sudoku_Solver
 
         public static string[] CutLastScreenshot()
         {
-            string screenshotPaht = ScreenshotHandler.GetLastScreenshotPath();
-            List<Image> cellImages = ScreenshotHandler.SplitImageIntoCells(screenshotPaht, 9, 0);
-            string cellsFolder = "Cells";
+            string lastScreenshotPath = ScreenshotHandler.GetLastScreenshotPath();
+            Image lastScreenshot = Image.FromFile(lastScreenshotPath);
+            Image processedImage = ScreenshotHandler.Preprocess(lastScreenshot);
+            string processedImagePath = "ProcessedImage\\preprocessedImage.png";
+            processedImage.Save(processedImagePath);
+
+            List<Image> cellImages = ScreenshotHandler.SplitImageIntoCells(processedImagePath, 9, 5);
+            string cellsFolder = "CellImages";
             ScreenshotHandler.Save(cellImages, cellsFolder);
 
             var listOfCells = Directory.GetFiles(cellsFolder);

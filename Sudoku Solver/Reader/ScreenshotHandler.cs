@@ -8,8 +8,8 @@ namespace Sudoku_Solver
         {
             Image screenshot = Image.FromFile(imagePath);
 
-            int cellWidth = screenshot.Width / numberOfCells;
-            int cellHeight = screenshot.Height / numberOfCells;
+            double cellWidth = (double) screenshot.Width / numberOfCells;
+            double cellHeight = (double) screenshot.Height / numberOfCells;
 
             List<Image> cells = new List<Image>();
 
@@ -17,17 +17,44 @@ namespace Sudoku_Solver
             {
                 for (int j = 0; j < numberOfCells; j++)
                 {
-                    int cropStartX = j * cellWidth + cutPadding;
-                    int cropStartY = i * cellHeight + cutPadding;
-                    int cropHeight = cellWidth - cutPadding;
-                    int cropWidth = cellHeight - cutPadding;
+                    int cropStartX = (int)(j * cellWidth + cutPadding);
+                    int cropStartY = (int)(i * cellHeight + cutPadding);
+                    int cropHeight = (int)(cellWidth - cutPadding);
+                    int cropWidth = (int)(cellHeight - cutPadding);
 
-                    Image croppedImage = CropImage(GetLastScreenshotPath(), cropStartX, cropStartY, cropWidth, cropHeight);
+                    Image croppedImage = CropImage(screenshot, cropStartX, cropStartY, cropWidth, cropHeight);
                     cells.Add(croppedImage);
                 }
             }
 
             return cells;
+        }
+
+        public static Image Preprocess(Image image)
+        {
+            Bitmap bitmap = new Bitmap(image);
+            
+            for (int row = 0; row < bitmap.Height; row++)
+            {
+                for (int col = 0; col < bitmap.Width; col++)
+                {
+                    Color color = bitmap.GetPixel(col, row);
+
+                    if (color.R == 52 &&
+                        color.G == 72 &&
+                        color.B == 97)
+                    {
+                        bitmap.SetPixel(col, row, Color.Black);
+                    }
+                    else
+                    {
+                        bitmap.SetPixel(col, row, Color.White);
+                    }
+
+                }
+            }
+
+            return bitmap;
         }
 
         public static void Save(Image image, string path)
@@ -49,11 +76,10 @@ namespace Sudoku_Solver
             }
         }
 
-        static Image CropImage(string path, int x, int y, int width, int height)
+        static Image CropImage(Image image, int x, int y, int width, int height)
         {
-            Image obraz = Image.FromFile(path);
             Rectangle rectangle = new Rectangle(x, y, width, height);
-            Bitmap bitmap = new Bitmap(obraz);
+            Bitmap bitmap = new Bitmap(image);
             Image croppedImage = bitmap.Clone(rectangle, bitmap.PixelFormat);
             return croppedImage;
         }
