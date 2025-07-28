@@ -8,24 +8,33 @@ namespace Sudoku_Solver.Sudoku
 {
     public class SudokuCell
     {
-        public char Value;
+        char value;
+        public char Value
+        {
+            get { return value; }
+            set
+            {
+                if ((value >= '0' && value <= '9') || value == '-')
+                {
+                    this.value = value;
+                    RemovePossibleNumber(value);
+                }
 
-        public List<char> PossibleNumbers = new List<char>() { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+                throw new ArgumentException("Invalid value for SudokuCell, must be digit or dash.");
+            }
+        }
+
+        List<char> possibleNumbers = new List<char>() { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+        public List<char> PossibleNumbers => possibleNumbers;
 
         public bool IsFilledIn 
         { 
             get => Value != '-';
         }
 
-        public SudokuCell(char value = '-')
+        public SudokuCell(char value)
         {
-            if ((value >= '0' && value <= '9') || value == '-')
-            {
-                Value = value;
-                RemovePossibleNumber(value);
-            }
-
-            throw new ArgumentException("Invalid value for SudokuCell, must be digit or dash.");
+            Value = value;
         }
 
         public SudokuCell(string value)
@@ -34,12 +43,12 @@ namespace Sudoku_Solver.Sudoku
 
         public void RemovePossibleNumber(char number)
         {
-            PossibleNumbers.Remove(number);
+            possibleNumbers.Remove(number);
         }
 
         public void AddPossibility(char number)
         {
-            PossibleNumbers.Add(number);
+            possibleNumbers.Add(number);
             //PossibleNumbers.Sort();
         }
 
