@@ -5,6 +5,7 @@ namespace Sudoku_Solver
     public partial class SudokuBoard
     {
         SudokuCell[,] board = new SudokuCell[9,9];
+        public SudokuCell[,] Board { get => board; }
 
         public SudokuBoard()
         {

@@ -10,7 +10,7 @@ namespace Sudoku_Solver.Reader
         public OCR()
         {
             ocr = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default);
-            ocr.SetVariable("tessedit_char_whitelist", "0123456789 ");
+            //ocr.SetVariable("tessedit_char_whitelist", "123456789 ");
         }
 
         public string ReadSingleCharacter(string imagePath)

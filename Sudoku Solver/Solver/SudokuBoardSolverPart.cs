@@ -18,7 +18,7 @@ namespace Sudoku_Solver
                 FillInCellsWithOnePossibility();
 
                 // check if a possible number is only in one cell
-                FillInCellsThatHoldOnlyPossibility();
+                //FillInCellsThatHoldOnlyPossibility();
 
                 // recursive algorithm for multiple possibilities
                 

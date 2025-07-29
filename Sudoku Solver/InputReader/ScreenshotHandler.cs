@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Windows.Forms;
 
 namespace Sudoku_Solver
 {
@@ -38,11 +39,12 @@ namespace Sudoku_Solver
             {
                 for (int col = 0; col < bitmap.Width; col++)
                 {
-                    Color color = bitmap.GetPixel(col, row);
+                    Color pixel = bitmap.GetPixel(col, row);
 
-                    if (color.R == 52 &&
-                        color.G == 72 &&
-                        color.B == 97)
+                    // reduce to black and white
+                    if (pixel.R == 52 &&
+                        pixel.G == 72 &&
+                        pixel.B == 97)
                     {
                         bitmap.SetPixel(col, row, Color.Black);
                     }
@@ -50,7 +52,39 @@ namespace Sudoku_Solver
                     {
                         bitmap.SetPixel(col, row, Color.White);
                     }
+                }
+            }
 
+            bitmap = (Bitmap)BoldenBlackPixels(bitmap, 2);
+
+            return bitmap;
+        }
+
+        public static Image BoldenBlackPixels(Image image, int thickness)
+        {
+            Bitmap bitmap = new Bitmap(image);
+
+            for (int i = 0; i < thickness; i++)
+            {
+                Console.WriteLine(i);
+                for (int row = 0; row < bitmap.Height; row++)
+                {
+                    for (int col = 0; col < bitmap.Width; col++)
+                    {
+                        try
+                        {
+                            Color pixelBelow = bitmap.GetPixel(col, row + 1);
+                            (int, int, int) RGBBelow = (pixelBelow.R, pixelBelow.G, pixelBelow.B);
+
+                            Color pixelLeft = bitmap.GetPixel(col + 1, row);
+                            (int, int, int) RGBLeft = (pixelLeft.R, pixelLeft.G, pixelLeft.B);
+
+                            if (RGBBelow == (0, 0, 0) || RGBLeft == (0, 0, 0))
+                                bitmap.SetPixel(col, row, Color.Black);
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        { }
+                    }
                 }
             }
 
