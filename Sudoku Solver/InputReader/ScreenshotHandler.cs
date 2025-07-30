@@ -110,9 +110,9 @@ namespace Sudoku_Solver
             }
         }
 
-        static Image CropImage(Image image, int x, int y, int width, int height)
+        static Image CropImage(Image image, int cropStartX, int cropStartY, int cropWidth, int cropHeight)
         {
-            Rectangle rectangle = new Rectangle(x, y, width, height);
+            Rectangle rectangle = new Rectangle(cropStartX, cropStartY, cropWidth, cropHeight);
             Bitmap bitmap = new Bitmap(image);
             Image croppedImage = bitmap.Clone(rectangle, bitmap.PixelFormat);
             return croppedImage;

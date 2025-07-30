@@ -1,4 +1,6 @@
 ﻿using Sudoku_Solver.Sudoku;
+using System;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Sudoku_Solver
 {
@@ -18,7 +20,7 @@ namespace Sudoku_Solver
                 FillInCellsWithOnePossibility();
 
                 // check if a possible number is only in one cell
-                //FillInCellsThatHoldOnlyPossibility();
+                FillInCellsThatHoldsOnlyPossibility();
 
                 // recursive algorithm for multiple possibilities
                 
@@ -41,6 +43,8 @@ namespace Sudoku_Solver
                         break;
                     }
                 }
+
+                return;
             }
         }
 
@@ -50,11 +54,13 @@ namespace Sudoku_Solver
             {
                 SudokuCell currentCell = board[row, col];
 
+                CellAction removePossibleNumber = (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value);
+
                 if (currentCell.IsFilledIn)
                 {
-                    IterateRow(row, (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value));
-                    IterateColumn(col, (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value));
-                    IterateBox(row, col, (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value));
+                    IterateRow(row, removePossibleNumber);
+                    IterateColumn(col, removePossibleNumber);
+                    IterateBox(row, col, removePossibleNumber);
                 }
             });
         }
@@ -70,9 +76,19 @@ namespace Sudoku_Solver
             });
         }
 
-        void FillInCellsThatHoldOnlyPossibility()
+        void FillInCellsThatHoldsOnlyPossibility()
         {
-            throw new NotImplementedException();
+            IterateBoard((row, col) =>
+            {
+                SudokuCell currentCell = board[row, col];
+
+                for (int i = 0; i < currentCell.PossibleNumbers.Count; i++)
+                {
+                    char currentPossibleNumber = currentCell.PossibleNumbers[i];
+                    
+
+                }
+            });
         }
 
         bool IsSolved()
@@ -126,33 +142,33 @@ namespace Sudoku_Solver
             {
                 SudokuCell currentCell = board[row, col];
 
-                IterateRow(row, (row, c) => 
+                IterateRow(row, (r, c) => 
                 { 
-                    if (board[row, c].Value == currentCell.Value) 
+                    if (board[r, c].Value == currentCell.Value && (row, col) != (r, c)) 
                     { 
                         isCorrect = false;
                         if (conflictMesseges)
-                            Console.WriteLine($"Row conflict at x:{row} y:{col}");
+                            Console.WriteLine($"Row conflict at x:{col} y:{row}");
                     }
                 });
 
-                IterateColumn(col, (row, c) => 
+                IterateColumn(col, (r, c) => 
                 { 
-                    if (board[row, c].Value == currentCell.Value)
+                    if (board[r, c].Value == currentCell.Value && (row, col) != (r, c))
                     {
                         isCorrect = false;
                         if (conflictMesseges)
-                            Console.WriteLine($"Column conflict at x:{row} y:{col}");
+                            Console.WriteLine($"Column conflict at x:{col} y:{row}");
                     }
                 });
 
-                IterateBox(row, col, (row, c) => 
+                IterateBox(row, col, (r, c) => 
                 { 
-                    if (board[row, c].Value == currentCell.Value)
+                    if (board[r, c].Value == currentCell.Value && (row, col) != (r, c))
                     {
                         isCorrect = false;
                         if (conflictMesseges)
-                            Console.WriteLine($"Box conflict at x:{row} y:{col}");
+                            Console.WriteLine($"Box conflict at x:{col} y:{row}");
                     }
                 });
             });

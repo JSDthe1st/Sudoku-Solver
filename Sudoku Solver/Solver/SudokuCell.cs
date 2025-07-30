@@ -13,7 +13,7 @@ namespace Sudoku_Solver.Sudoku
                 if (value >= '0' && value <= '9')
                 {
                     this.value = value;
-                    RemovePossibleNumber(value);
+                    possibleNumbers.Clear();
                 }
             }
         }

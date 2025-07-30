@@ -10,8 +10,8 @@ namespace Sudoku_Solver
     internal class Program
     {
         public static void Main(string[] args)
-        {         
-            var listOfCells = CutLastScreenshot();
+        {
+            string[] listOfCells = CutLastScreenshot();
 
             SudokuCell[,] cells = ReadValuesFromImages(listOfCells);
 
@@ -19,9 +19,12 @@ namespace Sudoku_Solver
             board.Display();
             Console.WriteLine();
 
+            
             board.Solve(true);
-
-            EnterSolution(board.Board);
+            board.IsCorrect();
+            return;
+            if (board.IsCorrect())
+                EnterSolution(board.Board);
         }
 
         public static string[] CutLastScreenshot()
