@@ -11,11 +11,11 @@ namespace Sudoku_Solver
         {
             List<(int, int)> history = new List<(int, int)> ();
 
+            // remove possibilities from other cells
+            RemoveAllImpossibleNumbers();
+
             while (!IsSolved())
             {
-                // remove possibilities from other cells
-                RemoveAllImpossibleNumbers();
-
                 // check if a cell has only one possible number and set it
                 FillInCellsWithOnePossibility();
 
@@ -79,7 +79,10 @@ namespace Sudoku_Solver
                 SudokuCell currentCell = board[row, col];
 
                 if (!currentCell.IsFilledIn && currentCell.PossibleNumbers.Count == 1)
+                {
                     currentCell.Value = currentCell.PossibleNumbers[0];
+                    RemoveImpossibleNumbers(row, col);
+                }
             });
         }
 
@@ -103,7 +106,7 @@ namespace Sudoku_Solver
                     {
                         {
                             currentCell.Value = currentPossibleNumber;
-                            RemoveAllImpossibleNumbers();
+                            RemoveImpossibleNumbers(row, col);
                             FillInCellsWithOnePossibility();
                             break;
                         }
