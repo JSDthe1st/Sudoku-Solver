@@ -14,7 +14,7 @@ namespace Sudoku_Solver
             while (!IsSolved())
             {
                 // remove possibilities from other cells
-                RemovePossibleNumbers();
+                RemoveAllImpossibleNumbers();
 
                 // check if a cell has only one possible number and set it
                 FillInCellsWithOnePossibility();
@@ -48,22 +48,29 @@ namespace Sudoku_Solver
             }
         }
 
-        void RemovePossibleNumbers()
+        void RemoveAllImpossibleNumbers()
         {
             IterateBoard((row, col) =>
             {
-                SudokuCell currentCell = board[row, col];
-
-                CellAction removePossibleNumber = (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value);
-
-                if (currentCell.IsFilledIn)
-                {
-                    IterateRow(row, removePossibleNumber);
-                    IterateColumn(col, removePossibleNumber);
-                    IterateBox(row, col, removePossibleNumber);
-                }
+                RemoveImpossibleNumbers(row, col);
             });
         }
+
+        void RemoveImpossibleNumbers(int row, int col)
+        {
+            SudokuCell currentCell = board[row, col];
+
+            CellAction removePossibleNumber = (r, c) => board[r, c].RemovePossibleNumber(currentCell.Value);
+
+            if (currentCell.IsFilledIn)
+            {
+                IterateRow(row, removePossibleNumber);
+                IterateColumn(col, removePossibleNumber);
+                IterateBox(row, col, removePossibleNumber);
+            }
+        }
+
+
 
         void FillInCellsWithOnePossibility()
         {
@@ -85,7 +92,22 @@ namespace Sudoku_Solver
                 for (int i = 0; i < currentCell.PossibleNumbers.Count; i++)
                 {
                     char currentPossibleNumber = currentCell.PossibleNumbers[i];
-                    
+
+                    int counter = 0;
+                    IterateBox(row, col, (r, c) =>
+                    {
+                        if (board[r, c].PossibleNumbers.Contains(currentPossibleNumber))
+                            counter++;
+                    });
+                    if (counter == 1)
+                    {
+                        {
+                            currentCell.Value = currentPossibleNumber;
+                            RemoveAllImpossibleNumbers();
+                            FillInCellsWithOnePossibility();
+                            break;
+                        }
+                    }
 
                 }
             });
@@ -142,39 +164,29 @@ namespace Sudoku_Solver
             {
                 SudokuCell currentCell = board[row, col];
 
-                IterateRow(row, (r, c) => 
-                { 
-                    if (board[r, c].Value == currentCell.Value && (row, col) != (r, c)) 
-                    { 
-                        isCorrect = false;
-                        if (conflictMesseges)
-                            Console.WriteLine($"Row conflict at x:{col} y:{row}");
-                    }
-                });
-
-                IterateColumn(col, (r, c) => 
-                { 
-                    if (board[r, c].Value == currentCell.Value && (row, col) != (r, c))
+                string messageStart = null;
+                CellAction action = (r, c) =>
+                {
+                    if (board[r, c].Value == currentCell.Value && (row, col) != (r, c) && currentCell.Value != '-')
                     {
                         isCorrect = false;
                         if (conflictMesseges)
-                            Console.WriteLine($"Column conflict at x:{col} y:{row}");
+                            Console.WriteLine(messageStart + $" conflict at x:{col} y:{row}");
                     }
-                });
+                };
 
-                IterateBox(row, col, (r, c) => 
-                { 
-                    if (board[r, c].Value == currentCell.Value && (row, col) != (r, c))
-                    {
-                        isCorrect = false;
-                        if (conflictMesseges)
-                            Console.WriteLine($"Box conflict at x:{col} y:{row}");
-                    }
-                });
+                messageStart = "Row"; 
+                IterateRow(row, action);
+
+                messageStart = "Column";
+                IterateColumn(col, action);
+
+                messageStart = "Box";
+                IterateBox(row, col, action);
             });
 
             if (isCorrect) 
-                Console.WriteLine("No conflicts founs.");
+                Console.WriteLine("No conflicts found.");
             
             return isCorrect;
         }

@@ -10,8 +10,6 @@ namespace Sudoku_Solver.InputWriter
     public class MouseOperations
     {
         EventSimulator simulator;
-
-
         public MouseOperations()
         {
             simulator = new EventSimulator();
