@@ -44,7 +44,7 @@ namespace Sudoku_Solver
                     }
                 }
 
-                return;
+                //return;
             }
         }
 
@@ -104,19 +104,44 @@ namespace Sudoku_Solver
                     });
                     if (counter == 1)
                     {
-                        {
-                            currentCell.Value = currentPossibleNumber;
-                            RemoveImpossibleNumbers(row, col);
-                            FillInCellsWithOnePossibility();
-                            break;
-                        }
+                        currentCell.Value = currentPossibleNumber;
+                        RemoveImpossibleNumbers(row, col);
+                        FillInCellsWithOnePossibility();
+                        break;
                     }
 
+                    counter = 0;
+                    IterateRow(row, (r, c) =>
+                    {
+                        if (board[r, c].PossibleNumbers.Contains(currentPossibleNumber))
+                            counter++;
+                    });
+                    if (counter == 1)
+                    {
+                        currentCell.Value = currentPossibleNumber;
+                        RemoveImpossibleNumbers(row, col);
+                        FillInCellsWithOnePossibility();
+                        break;
+                    }
+
+                    counter = 0;
+                    IterateColumn(col, (r, c) =>
+                    {
+                        if (board[r, c].PossibleNumbers.Contains(currentPossibleNumber))
+                            counter++;
+                    });
+                    if (counter == 1)
+                    {
+                        currentCell.Value = currentPossibleNumber;
+                        RemoveImpossibleNumbers(row, col);
+                        FillInCellsWithOnePossibility();
+                        break;
+                    }
                 }
             });
         }
 
-        bool IsSolved()
+        public bool IsSolved()
         {
             bool solved = true;
             IterateBoard((row, col) =>

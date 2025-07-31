@@ -19,11 +19,9 @@ namespace Sudoku_Solver
             board.Display();
             Console.WriteLine();
 
-            
             board.Solve(true);
             board.IsCorrect();
-            return;
-            if (board.IsCorrect())
+            if (board.IsSolved())
                 EnterSolution(board.Board);
         }
 
