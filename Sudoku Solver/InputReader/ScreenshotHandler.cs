@@ -21,6 +21,7 @@ namespace Sudoku_Solver
                 {
                     int cropStartX = (int)(j * cellWidth + cutPadding);
                     int cropStartY = (int)(i * cellHeight + cutPadding);
+
                     int cropHeight = (int)(cellHeight - 2 * cutPadding);
                     int cropWidth = (int)(cellWidth - 2 * cutPadding);
 
@@ -40,25 +41,26 @@ namespace Sudoku_Solver
             {
                 for (int col = 0; col < bitmap.Width; col++)
                 {
-                    Color pixel = bitmap.GetPixel(col, row);
-
-                    // reduce to black and white
-                    if (pixel.R == 52 &&
-                        pixel.G == 72 &&
-                        pixel.B == 97)
-                    {
-                        bitmap.SetPixel(col, row, Color.Black);
-                    }
-                    else
-                    {
-                        bitmap.SetPixel(col, row, Color.White);
-                    }
+                    (int, int, int) allowedRGB = (52, 72, 97); // font color on sucoku.com
+                    ReduceColor(bitmap, row, col, allowedRGB);
                 }
             }
 
             bitmap = (Bitmap)BoldenBlackPixels(bitmap, 2);
 
             return bitmap;
+        }
+
+        // turn pixel black or white
+        public static void ReduceColor(Bitmap bitmap, int row, int col, (int,int, int) allobedRGB)
+        {
+            Color pixel = bitmap.GetPixel(col, row);
+            (int, int, int) RGB = (pixel.R, pixel.G, pixel.B);
+
+            if (RGB == allobedRGB) // font color on sucoku.com
+                bitmap.SetPixel(col, row, Color.Black);
+            else
+                bitmap.SetPixel(col, row, Color.White);
         }
 
         public static Image BoldenBlackPixels(Image image, int thickness)
@@ -68,23 +70,18 @@ namespace Sudoku_Solver
             for (int i = 0; i < thickness; i++)
             {
                 Console.WriteLine(i);
-                for (int row = 0; row < bitmap.Height; row++)
+                for (int row = 0; row < bitmap.Height - 1; row++)
                 {
-                    for (int col = 0; col < bitmap.Width; col++)
+                    for (int col = 0; col < bitmap.Width - 1; col++)
                     {
-                        try
-                        {
-                            Color pixelBelow = bitmap.GetPixel(col, row + 1);
-                            (int, int, int) RGBBelow = (pixelBelow.R, pixelBelow.G, pixelBelow.B);
+                        Color pixelBelow = bitmap.GetPixel(col, row + 1);
+                        (int, int, int) RGBBelow = (pixelBelow.R, pixelBelow.G, pixelBelow.B);
 
-                            Color pixelLeft = bitmap.GetPixel(col + 1, row);
-                            (int, int, int) RGBLeft = (pixelLeft.R, pixelLeft.G, pixelLeft.B);
+                        Color pixelLeft = bitmap.GetPixel(col + 1, row);
+                        (int, int, int) RGBLeft = (pixelLeft.R, pixelLeft.G, pixelLeft.B);
 
-                            if (RGBBelow == (0, 0, 0) || RGBLeft == (0, 0, 0))
-                                bitmap.SetPixel(col, row, Color.Black);
-                        }
-                        catch (ArgumentOutOfRangeException)
-                        { }
+                        if (RGBBelow == (0, 0, 0) || RGBLeft == (0, 0, 0))
+                            bitmap.SetPixel(col, row, Color.Black);
                     }
                 }
             }
