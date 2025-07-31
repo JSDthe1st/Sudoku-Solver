@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Net;
 using System.Windows.Forms;
 
 namespace Sudoku_Solver
@@ -20,8 +21,8 @@ namespace Sudoku_Solver
                 {
                     int cropStartX = (int)(j * cellWidth + cutPadding);
                     int cropStartY = (int)(i * cellHeight + cutPadding);
-                    int cropHeight = (int)(cellWidth - cutPadding);
-                    int cropWidth = (int)(cellHeight - cutPadding);
+                    int cropHeight = (int)(cellHeight - cutPadding);
+                    int cropWidth = (int)(cellWidth - cutPadding);
 
                     Image croppedImage = CropImage(screenshot, cropStartX, cropStartY, cropWidth, cropHeight);
                     cells.Add(croppedImage);
