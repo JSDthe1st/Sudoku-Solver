@@ -21,6 +21,8 @@ namespace Sudoku_Solver
 
             board.Solve(true);
             board.IsCorrect();
+
+            return;
             if (board.IsSolved())
                 EnterSolution(board.Board);
         }

@@ -74,19 +74,24 @@ namespace Sudoku_Solver
                 {
                     for (int col = 0; col < bitmap.Width - 1; col++)
                     {
-                        Color pixelBelow = bitmap.GetPixel(col, row + 1);
-                        (int, int, int) RGBBelow = (pixelBelow.R, pixelBelow.G, pixelBelow.B);
-
-                        Color pixelLeft = bitmap.GetPixel(col + 1, row);
-                        (int, int, int) RGBLeft = (pixelLeft.R, pixelLeft.G, pixelLeft.B);
-
-                        if (RGBBelow == (0, 0, 0) || RGBLeft == (0, 0, 0))
-                            bitmap.SetPixel(col, row, Color.Black);
+                        BoldenBlackPixel(bitmap, row, col, thickness);
                     }
                 }
             }
 
             return bitmap;
+        }
+
+        public static void BoldenBlackPixel(Bitmap bitmap, int row, int col, int thickness)
+        {
+            Color pixelBelow = bitmap.GetPixel(col, row + 1);
+            Color pixelLeft = bitmap.GetPixel(col + 1, row);
+
+            (int, int, int) RGBBelow = (pixelBelow.R, pixelBelow.G, pixelBelow.B);
+            (int, int, int) RGBLeft = (pixelLeft.R, pixelLeft.G, pixelLeft.B);
+
+            if (RGBBelow == (0, 0, 0) || RGBLeft == (0, 0, 0))
+                bitmap.SetPixel(col, row, Color.Black);
         }
 
         public static void Save(Image image, string path)
