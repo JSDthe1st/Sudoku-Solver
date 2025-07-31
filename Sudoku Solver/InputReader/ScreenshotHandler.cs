@@ -21,8 +21,8 @@ namespace Sudoku_Solver
                 {
                     int cropStartX = (int)(j * cellWidth + cutPadding);
                     int cropStartY = (int)(i * cellHeight + cutPadding);
-                    int cropHeight = (int)(cellHeight - cutPadding);
-                    int cropWidth = (int)(cellWidth - cutPadding);
+                    int cropHeight = (int)(cellHeight - 2 * cutPadding);
+                    int cropWidth = (int)(cellWidth - 2 * cutPadding);
 
                     Image croppedImage = CropImage(screenshot, cropStartX, cropStartY, cropWidth, cropHeight);
                     cells.Add(croppedImage);
