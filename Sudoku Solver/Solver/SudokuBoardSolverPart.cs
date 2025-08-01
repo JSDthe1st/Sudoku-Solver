@@ -41,7 +41,20 @@ namespace Sudoku_Solver
                     if (history[0] == history[1] &&
                         history[0] == history[2])
                     {
-                        Console.WriteLine("Timedout!");
+                        var minCellPossibilities = FindCellWithMinPossibilities();
+                        foreach (char possibility in board[minCellPossibilities.row, minCellPossibilities.col].PossibleNumbers)
+                        {
+                            SudokuBoard newBoard = new SudokuBoard(this);
+                            newBoard.board[minCellPossibilities.row, minCellPossibilities.col].Value = possibility;
+                            bool solved = newBoard.Solve(displayProgress);
+                            if (solved)
+                            {
+                                board = newBoard.board;
+                                return true;
+                            }
+                        }
+
+                        Console.WriteLine("Couldn't solve this sudoku :c");
                         return false;
                     }
                 }
@@ -69,13 +82,25 @@ namespace Sudoku_Solver
 
         (int row, int col) FindCellWithMinPossibilities()
         {
-            (int row, int col) least = (0, 0);
+            (int row, int col) least = (0, 0); // temp value, should get replaced
+
+            IterateBoard((row, col) =>
+            {
+                if (!board[row, col].IsFilledIn)
+                {
+                    least = (row, col);
+                    return;
+                }
+            });
+
+            if (board[least.row, least.col].IsFilledIn)
+                throw new Exception("No empty cells found in the board.");
 
             IterateBoard((row, col) =>
             {
                 int minCount = board[least.row, least.col].PossibleNumbers.Count;
                 int currentCount = board[row, col].PossibleNumbers.Count;
-                if (currentCount < minCount)
+                if (currentCount < minCount && !board[row, col].IsFilledIn)
                     least = (row, col);
             });
 

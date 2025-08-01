@@ -22,7 +22,7 @@ namespace Sudoku_Solver
             board.Solve(true);
             board.IsCorrect();
 
-            return;
+            //return;
             if (board.IsSolved())
                 EnterSolution(board.Board);
         }
