@@ -5,25 +5,27 @@ using System.Reflection.Metadata.Ecma335;
 namespace Sudoku_Solver
 {
     delegate void CellAction(int row, int col);
+
     public partial class SudokuBoard
     {
-        public void Solve(bool displayProgress = false)
+        public bool Solve(bool displayProgress = false)
         {
             List<(int, int)> history = new List<(int, int)> ();
 
-            // remove possibilities from other cells
             RemoveAllImpossibleNumbers();
+
+            if (FindCellsWithNoPossibility())
+                return false;
 
             while (!IsSolved())
             {
-                // check if a cell has only one possible number and set it
                 FillInCellsWithOnePossibility();
 
-                // check if a possible number is only in one cell
                 FillInCellsThatHoldsOnlyPossibility();
 
-                // recursive algorithm for multiple possibilities
-                
+                if (FindCellsWithNoPossibility())
+                    return false;
+
                 if (displayProgress)
                 {
                     Display();
@@ -40,12 +42,44 @@ namespace Sudoku_Solver
                         history[0] == history[2])
                     {
                         Console.WriteLine("Timedout!");
-                        break;
+                        return false;
                     }
                 }
-
-                //return;
             }
+
+            return true;
+        }
+
+        bool FindCellsWithNoPossibility()
+        {
+            bool found = false;
+
+            IterateBoard((row, col) =>
+            {
+                SudokuCell currentCell = board[row, col];
+                if (!currentCell.IsFilledIn && currentCell.PossibleNumbers.Count == 0)
+                {
+                    found = true;
+                    return;
+                }
+            });
+
+            return found;
+        }
+
+        (int row, int col) FindCellWithMinPossibilities()
+        {
+            (int row, int col) least = (0, 0);
+
+            IterateBoard((row, col) =>
+            {
+                int minCount = board[least.row, least.col].PossibleNumbers.Count;
+                int currentCount = board[row, col].PossibleNumbers.Count;
+                if (currentCount < minCount)
+                    least = (row, col);
+            });
+
+            return least;
         }
 
         void RemoveAllImpossibleNumbers()
