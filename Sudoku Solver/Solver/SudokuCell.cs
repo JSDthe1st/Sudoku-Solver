@@ -39,6 +39,12 @@ namespace Sudoku_Solver.Sudoku
                 Value = value[0];
         }
 
+        public SudokuCell(SudokuCell otherCell)
+        {
+            Value = otherCell.Value;
+            possibleNumbers = new List<char>(otherCell.possibleNumbers);
+        }
+
         public void RemovePossibleNumber(char number)
         {
             possibleNumbers.Remove(number);

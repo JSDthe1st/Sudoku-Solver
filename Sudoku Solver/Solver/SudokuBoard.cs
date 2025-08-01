@@ -4,23 +4,32 @@ namespace Sudoku_Solver
 {
     public partial class SudokuBoard
     {
-        SudokuCell[,] board = new SudokuCell[9,9];
+        SudokuCell[,] board;
         public SudokuCell[,] Board { get => board; }
 
         public SudokuBoard()
         {
-
+            board = new SudokuCell[9, 9];
         }
         
-        public SudokuBoard(SudokuCell[,] board)
+        public SudokuBoard(SudokuCell[,] otherBoard)
             : this()
         {
-            this.board = board;
+            LoadNumbers(otherBoard);
         }
 
-        public void LoadNumbers(SudokuCell[,] board)
+        public SudokuBoard(SudokuBoard otherSucokuBoard)
+             : this()
         {
-            this.board = board;
+            LoadNumbers(otherSucokuBoard.board);
+        }
+
+        public void LoadNumbers(SudokuCell[,] otherBoard)
+        {
+            IterateBoard((r, c) =>
+            {
+                board[r, c] = new SudokuCell(otherBoard[r, c]);
+            });
         }
 
         public void LoadNumbers(string path)
@@ -45,18 +54,18 @@ namespace Sudoku_Solver
             if (board is null)
                 return;
 
-            for (int i = 0; i < 9; i++)
+            for (int row = 0; row < 9; row++)
             {
-                for (int j = 0; j < 9; j++)
+                for (int col = 0; col < 9; col++)
                 {
-                    Console.Write(board[i, j] + " ");
+                    Console.Write(board[row, col] + " ");
 
-                    if (j == 2 || j == 5)
+                    if (col == 2 || col == 5)
                         Console.Write("| ");
                 }
                 Console.WriteLine();
 
-                if (i == 2 || i == 5)
+                if (row == 2 || row == 5)
                     Console.WriteLine("------+-------+------");
             }
         }
